@@ -8,8 +8,8 @@ public class HelloResourceTest extends JerseyResourceTest<HelloResource> {
 
 	@Test
 	public void helloResourceMustSayHello() {
-		String hello = target("/hello").request().get(String.class);
-		assertEquals("Hello!", hello);
+		String hello = target("/greeting").queryParam("name", "NewCircle").request().get(String.class);
+		assertEquals("Hello, NewCircle!", hello);
 	}
 
 }
