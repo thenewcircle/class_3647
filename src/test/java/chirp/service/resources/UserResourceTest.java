@@ -5,7 +5,10 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -17,10 +20,15 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 	
 	@Test
 	public void createUserWithPOSTSuccess() {
-		Form user = new Form().param("realname", "John Doe").param("username", "john.doe");
-		Response response = target("/users").request().post(Entity.form(user));
-		assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		Form userForm = new Form();
+		userForm.param("realname", "John Doe");
+		userForm.param("username", "john.doe");
+		Entity<Form> uploadData = Entity.form(userForm);
+		Response response = target("/users").request().post(uploadData);
+		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 		assertNotNull(users.getUser("john.doe"));
+		String realName = target("/users").path("john.doe").request().accept(MediaType.TEXT_PLAIN).get(String.class);
+		assertEquals("John Doe", realName);
 	}
 
 }
