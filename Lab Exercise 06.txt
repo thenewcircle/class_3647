@@ -1,0 +1,21 @@
+Lab Exercise 6
+--------------
+
+1. Now that we created a user, let's map some exceptions.
+   Observe what type of exceptions are defined in the model.
+   
+2. Create a new test case that handles the case when you have duplicate entities.
+   It should return FORBIDDEN response value.
+   
+3. Let's update our server to include additional packages, e.g. chirp.service.providers package
+   Use semi-colon to list additional packages.
+   
+4. Create new package, e.g. chirp.service.providers
+
+5. Let's add new exception mapper class, e.g. DuplicateEntityExceptionMapper that
+   extends base ExceptionMapper<DuplicateEntityException> class.
+   
+   Override toResponse() method to return a proper method with status FORBIDDEN (403).
+   
+6. Make sure your test passes.
+
