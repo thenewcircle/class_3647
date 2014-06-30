@@ -1,0 +1,17 @@
+Lab Exercise 2
+--------------
+
+1. We want to change the URL path from "hello" to "greeting", e.g.
+   http://localhost:8080/greeting?name=NewCircle
+
+2. Update the test case first.
+
+3. Update the HelloResource to provide custom greeting using the name parameter.
+
+4. Test that the solution works.
+
+5. Questions:
+* What type of parameter is "name"?
+* How does one add support for this type of parameter?
+* Where did you find information on how to update the code?
+* How did you test the HelloResource for this new feature?
