@@ -1,0 +1,47 @@
+Lab Exercise 1
+--------------
+
+1. Look at the initial application skeleton. Observe the following directories:
+
+  * src/main/java - for production Java code
+  * src/test/java - for test Java code
+
+2. Observe different Java packages:
+
+  * chirp.model - entity model with business logic
+  * chirp.service - runnable embedded server
+  * chirp.service.resources - REST resources
+
+3. Look at chirp.model package. What do you see here? 
+   We defined few entities, data model and few named runtime exceptions.
+
+4. Look at chirp.service.resources package. What do you see there?
+   We have one generic resource, e.g. HelloResource.
+   What is the URL for this resource?
+   
+5. Look at pom.xml, observe the dependencies.
+   Observe the runnable class defined in exec-maven-plugin.
+
+6. Look at chirp.service package.
+   There is a single class, an executable class with main method.
+   Does it match the exec-maven-plugin in pom.xml?
+
+7. Observe the testing module in src/test/java.
+   We created JerseyResourceTest generic class to help you
+   test resources with embedded server.
+   Observe how the HelloResourceTest is testing the HelloResource.
+   
+8. Run the Server class as a Java application, e.g. right click on Server.java and run it as Java application.
+   Alternatively, you could run maven task from command line, e.g. mvn exec:exec
+   
+9. Test the application, e.g. http://localhost:8080/hello
+
+10. Use alternative REST clients to test the application URL as well, e.g.
+      - Chrome Browser Add-on Postman
+      - curl utility from command line
+      - telnet utility from command line line
+      
+11. Run tests using JUnit.
+
+12. Run tests using Maven, e.g. mvn test
+
