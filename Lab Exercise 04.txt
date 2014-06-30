@@ -1,0 +1,40 @@
+Lab Exercise 4
+--------------
+
+1. What is Chirp?
+
+2. Entities or Resources?
+
+3. Services:
+
+      User
+        - Create a user
+        - Retrieve a user
+        - Retrieve all users
+        - Delete a user
+
+      Message
+        - A user creates a message
+        - Retrieve a message
+        - Retrieve all messages for user
+        - Delete a message
+        
+4. Map out the HTTP verbs for the services described above.
+
+5. Think about the test cases for each.
+   How will you verify if a service behaves as expected?
+   
+6. Next, we want to create a user first, before adding any messages for the user.
+
+7. Create a test case first, e.g. UserResourceTest
+   to submit a form data of a user with realname and username parameters.
+   
+8. Create a new user resource, e.g. UserResource and map it to
+   http://localhost:8080/user
+   
+9. Use POST to create a new user, and use UserRepository to store it locally.
+   Make sure you use x-www-form-urlencoded, not form-data.
+   
+
+
+8. 
