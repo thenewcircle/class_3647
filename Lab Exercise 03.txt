@@ -1,0 +1,16 @@
+Lab Exercise 3
+--------------
+
+1. We want to change the query parameter with path parameter to pass in data into resource.
+
+2. Update the test case first.
+
+3. Update the HelloResource to provide custom greeting using the name path parameter.
+
+4. Test that the solution works.
+
+5. Questions:
+* What type of parameter is "name"?
+* How does one add support for this type of parameter?
+* Where did you find information on how to update the code?
+* How did you test the HelloResource for this new feature?
