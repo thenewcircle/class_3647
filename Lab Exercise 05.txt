@@ -1,0 +1,12 @@
+Lab Exercise 5
+--------------
+
+1. We returned 204 (NO_CONTENT) after creating a resource.
+   What are some other 2xx level codes that might be more appropriate?
+
+2. Update test case to use more appropriate status code.
+
+3. Update UserResource to return more appropriate status code.
+   Use ResponseBuilder and UriBuilder objects to return the status code.
+
+
