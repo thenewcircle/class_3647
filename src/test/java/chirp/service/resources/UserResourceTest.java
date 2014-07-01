@@ -46,17 +46,16 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 	@Test
 	public void createDuplicateUser() {
 		
+		User john = new User("john.doe", "John Doe");
+		users.createUser(john.getUsername(), john.getRealname());
+		
 		Form userForm = new Form();
-		userForm.param("realname", "John Doe");
-		userForm.param("username", "john.doe");
+		userForm.param("realname", john.getRealname());
+		userForm.param("username", john.getUsername());
 		Entity<Form> uploadData = Entity.form(userForm);
 		
-		Response response1 = target("/users").request().post(uploadData);
-		assertEquals(Response.Status.CREATED.getStatusCode(), response1.getStatus());
-		assertNotNull(users.getUser("john.doe"));
-		
-		Response response2 = target("/users").request().post(uploadData);
-		assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
+		Response response = target("/users").request().post(uploadData);
+		assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
 		
 	}
 	
@@ -66,7 +65,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		User john = new User("john.doe", "John Doe");
 		users.createUser(john.getUsername(), john.getRealname());
 		
-		Response response = target("/users").path("john.doe").request().get();
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.TEXT_PLAIN).get();
 		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
 
