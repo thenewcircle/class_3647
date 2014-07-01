@@ -2,14 +2,25 @@ package chirp.service.resources;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
 
+import chirp.model.User;
 import chirp.model.UserRepository;
 
 public class UserResourceTest extends JerseyResourceTest<UserResource> {
@@ -49,6 +60,82 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		
 		Response response2 = target("/users").request().post(uploadData);
 		assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
+		
+	}
+	
+	@Test
+	public void getSingleUserAsText() {
+		
+		User john = new User("john.doe", "John Doe");
+		users.createUser(john.getUsername(), john.getRealname());
+		
+		Response response = target("/users").path("john.doe").request().get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
+
+		Object entity = response.getEntity();
+		assertEquals(ByteArrayInputStream.class, entity.getClass());
+
+		// read the body of the response
+		ByteArrayInputStream body = (ByteArrayInputStream) entity;
+		StringBuffer sb = new StringBuffer();
+		while (true) {
+			int read = body.read();
+			if ( read == -1 ) break;
+			sb.append((char)read);
+		}
+		
+		// close body stream
+		try {
+			body.close();
+		} catch (IOException ioe) {
+			fail("Caught IOException.");
+		}
+		
+		assertEquals(john.toString(), sb.toString());		
+		
+	}
+
+	@Test
+	public void getUsersAsText() {
+		
+		Collection<User> set = new HashSet<>();
+		set.add(new User("john.doe", "John Doe"));
+		set.add(new User("jane.doe", "Jane Doe"));
+		set.add(new User("jack.doe", "Jack Doe"));
+		set.add(new User("jill.doe", "Jill Doe"));
+		for ( User u: set) {
+			users.createUser(u.getUsername(), u.getRealname());
+		}
+		
+		Response response = target("/users").request().get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
+
+		Object entity = response.getEntity();
+		assertEquals(ByteArrayInputStream.class, entity.getClass());
+
+		// read the body of the response
+		ByteArrayInputStream body = (ByteArrayInputStream) entity;
+		StringBuffer sb = new StringBuffer();
+		while (true) {
+			int read = body.read();
+			if ( read == -1 ) break;
+			sb.append((char)read);
+		}
+		
+		// close body stream
+		try {
+			body.close();
+		} catch (IOException ioe) {
+			fail("Caught IOException.");
+		}
+		
+		// check that every user is in the body response
+		// we cannot guarantee the order of the output user
+		for (User u : set) {
+			assertEquals(true,sb.toString().contains(u.toString()));
+		}
 		
 	}
 
