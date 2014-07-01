@@ -134,9 +134,24 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		}
 		
 	}
+
+	@Test
+	public void getSingleUsersAsXml() {
+		
+		User john = new User("john.doe", "John Doe");
+		users.createUser(john.getUsername(), john.getRealname());
+		
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
+		
+		// TODO: Implement testing the actual XML response
+		
+	}
+
 	
 	@Test
-	public void getSingleUserAsXml() {
+	public void getUsersAsXml() {
 		
 		Collection<User> set = new HashSet<>();
 		set.add(new User("john.doe", "John Doe"));
@@ -156,17 +171,38 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 	}
 
 	@Test
-	public void getUsersAsXml() {
-		
+	public void getSingleUserAsJson() {
+	
 		User john = new User("john.doe", "John Doe");
 		users.createUser(john.getUsername(), john.getRealname());
 		
-		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_JSON_TYPE).get();
 		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
+		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
 		
-		// TODO: Implement testing the actual XML response
+		// TODO: Implement testing the actual JSON response
 		
 	}
+
+	@Test
+	public void getUsersAsJson() {
+
+		Collection<User> set = new HashSet<>();
+		set.add(new User("john.doe", "John Doe"));
+		set.add(new User("jane.doe", "Jane Doe"));
+		set.add(new User("jack.doe", "Jack Doe"));
+		set.add(new User("jill.doe", "Jill Doe"));
+		for ( User u: set) {
+			users.createUser(u.getUsername(), u.getRealname());
+		}
+		
+		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_JSON_TYPE).get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
+		
+		// TODO: Implement testing the actual JSON response
+		
+	}
+
 
 }

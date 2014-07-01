@@ -1,0 +1,44 @@
+Lab Exercise 9
+--------------
+
+1. In last exercise, we have used APPLICATION_XML_TYPE. Now, let's use APPLICATION_JSON_TYPE.
+   In order to serialize resource entities, we need to use Jackson libraries.
+
+2. Add Jackson providers to pom.xml
+
+   <dependency>
+		<groupId>com.fasterxml.jackson.jaxrs</groupId>
+		<artifactId>jackson-jaxrs-json-provider</artifactId>
+		<version>2.4.1</version>
+	</dependency>
+
+3. Add new retrieval methods to UserResource, e.g.
+
+   public User getUserAsJson(String username)
+   public Collection<User> getUsersAsJson()
+   
+4. Add test cases for both methods.
+
+   Your output should be something like this:
+
+   http://localhost:8080/users/john.doe
+   {
+       "username": "john.doe",
+       "realname": "John Doe",
+       "posts": []
+   } 
+
+   http://localhost:8080/users
+   [
+       {
+           "username": "jane.doe",
+           "realname": "Jane Doe",
+           "posts": []
+       },
+       {
+           "username": "john.doe",
+           "realname": "John Doe",
+           "posts": []
+       }
+   ]
+   

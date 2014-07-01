@@ -74,4 +74,23 @@ public class UserResource {
 		return users;
 	}
 	
+	@GET
+	@Path("{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getUserAsJson(@PathParam("username") String username) {
+		logger.info("Searching for a APPLICATION_JSON representation of user with username={}", username);
+		User user = database.getUser(username);
+		logger.info("Found a user: " + user);
+		return user;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getUsersAsJson() {
+		logger.info("Searching for a APPLICATION_JSON representation of users");
+		Collection<User> users = database.getUsers();
+		logger.info("Found users: " + users.size());
+		return users;
+	}
+	
 }
