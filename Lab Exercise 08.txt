@@ -1,0 +1,40 @@
+Lab Exercise 8
+--------------
+
+1. In last exercise, we have used TEXT_PLAIN_TYPE. Now, let's use APPLICATION_XML_TYPE.
+   In order to serialize resource entities, we need to use Java XML Binding (JAXB).
+
+2. Add default constructor to User entity, e.g.
+
+   public User() {}
+   
+   (You might need to make properties non-final, i.e. username and realname)
+   
+3. Add JAXB bindings to User entity, e.g.
+
+     @XmlRootElement (for the class)
+     @XmlAttribute (for realname and username)
+
+4. Add new retrieval methods to UserResource, e.g.
+
+   public User getUserAsXml(String username)
+   public Collection<User> getUsersAsXml()
+   
+5. Add test cases for both methods.
+
+   Your output should be something like this:
+
+   http://localhost:8080/users/john.doe
+
+   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+   <user realname="John Doe" username="john.doe"/>
+   
+
+   http://localhost:8080/users
+   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+   <users>
+     <user realname="Jane Doe" username="jane.doe"/>
+     <user realname="John Doe" username="john.doe"/>
+   </users>
+   
+  

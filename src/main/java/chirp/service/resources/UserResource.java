@@ -55,4 +55,23 @@ public class UserResource {
 		return users.toString();
 	}
 	
+	@GET
+	@Path("{username}")
+	@Produces(MediaType.APPLICATION_XML)
+	public User getUserAsXml(@PathParam("username") String username) {
+		logger.info("Searching for a APPLICATION_XML representation of user with username={}", username);
+		User user = database.getUser(username);
+		logger.info("Found a user: " + user);
+		return user;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public Collection<User> getUsersAsXml() {
+		logger.info("Searching for a APPLICATION_XML representation of users");
+		Collection<User> users = database.getUsers();
+		logger.info("Found users: " + users.size());
+		return users;
+	}
+	
 }
