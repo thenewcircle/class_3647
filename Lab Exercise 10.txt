@@ -1,0 +1,23 @@
+Lab Exercise 10
+---------------
+
+1. Now, we just have two resources:
+
+     UserResource
+     HelloResource
+     
+     Let's add another resource, e.g. PostResource that represents user's posted messages.
+
+2. We want to create messages for a specific user, e.g. 
+
+   /posts/{username}
+ 
+   Add Path to the class.  
+        
+3. Let's implement create post message use case.
+
+   Add new method to PostResource that will create Post for a specific user.
+   
+
+4. Return back CREATED with the URI of the created resource.
+
