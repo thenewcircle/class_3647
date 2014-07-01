@@ -6,10 +6,8 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
@@ -18,7 +16,6 @@ import javax.ws.rs.core.Response;
 
 import org.junit.After;
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
 
 import chirp.model.User;
 import chirp.model.UserRepository;
@@ -108,7 +105,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 			users.createUser(u.getUsername(), u.getRealname());
 		}
 		
-		Response response = target("/users").request().get();
+		Response response = target("/users").request().header("Accept", "text/plain").get();
 		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
 
@@ -136,6 +133,40 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		for (User u : set) {
 			assertEquals(true,sb.toString().contains(u.toString()));
 		}
+		
+	}
+	
+	@Test
+	public void getSingleUserAsXml() {
+		
+		Collection<User> set = new HashSet<>();
+		set.add(new User("john.doe", "John Doe"));
+		set.add(new User("jane.doe", "Jane Doe"));
+		set.add(new User("jack.doe", "Jack Doe"));
+		set.add(new User("jill.doe", "Jill Doe"));
+		for ( User u: set) {
+			users.createUser(u.getUsername(), u.getRealname());
+		}
+		
+		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
+		
+		// TODO: Implement testing the actual XML response
+		
+	}
+
+	@Test
+	public void getUsersAsXml() {
+		
+		User john = new User("john.doe", "John Doe");
+		users.createUser(john.getUsername(), john.getRealname());
+		
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
+		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
+		
+		// TODO: Implement testing the actual XML response
 		
 	}
 
