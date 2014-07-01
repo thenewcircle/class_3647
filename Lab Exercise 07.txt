@@ -1,0 +1,77 @@
+Lab Exercise 7
+--------------
+
+1. So far, we have two resources:
+
+     HelloResource - with retrieval (@GET)
+     UserResource  - with creation (@POST)
+
+   We need to create retrieval for UserResource as well.
+   
+   
+2. Let's create a simple retrieval service, e.g. 
+
+     public User getUser(String username) ...
+
+   Map this method to get a specific user with a PathParam, e.g.
+
+     http://localhost:8080/users/john.doe
+
+   What HTTP verb is most appropriate for retrieving data from the server?
+   
+3. Run the server, try to retrieve known user from the server, e.g.
+
+     http://localhost:8080/users/john.doe
+     
+   Observe the console with error messages, e.g.
+   
+   ...[Grizzly-worker(1)] ERROR o.g.j.m.i.WriterInterceptorExecutor - 
+            MessageBodyWriter not found for media type=text/plain, 
+            type=class chirp.model.User, genericType=class chirp.model.User.
+   
+   What does that mean?
+   
+4. Use Postman (Chrome application) to play with "Accept" headers, e.g.
+
+    application/json
+    application/xml
+    text/html
+    text/plain
+    
+    Use @Produces tag to specify what types particular method should match
+    the request with specific "Accept" header tag.
+    
+    Notice that all of our calls are missing the proper MessageBodyWriter for the User type.
+    
+
+5. Let's try to create a simple PLAIN_TEXT_TYPE representation of the user first, e.g.
+
+        public String getUserAsText(String username)
+
+   Use the similar options we used earlier in step 2, e.g.
+
+		@GET
+		@Path("{username}")
+		@Produces(MediaType.PLAIN_TEXT_TYPE)
+		public String getUserAsText(@PathParam("username") String username)
+		
+   Try the browser now, e.g.
+   
+		http://localhost:8080/users/neven
+		
+    You should get a text representation of the user resource.
+    
+6. Create a test case that illustrates this as well.
+
+   You might want to play with ByteArrayInputStream to get response body.
+   
+7. Repeat the steps 5-6 for producing the list of users, e.g.
+
+		@GET
+		@Produces(MediaType.PLAIN_TEXT_TYPE)
+		public String getUsersAsText()
+
+8. Create a test case that illustrates this use case.
+
+   Again, you might want to play with ByteArrayInputStream to get the response body.
+   
