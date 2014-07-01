@@ -18,11 +18,13 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String username;
-	private String realname;
+	private final String username;
+	private final String realname;
 	private final Map<Timestamp, Post> posts = new TreeMap<Timestamp, Post>();
 
 	public User() {	
+		this.username = "unknown";
+		this.realname = "unknown";
 	}
 	
 	public User(String username, String realname) {
