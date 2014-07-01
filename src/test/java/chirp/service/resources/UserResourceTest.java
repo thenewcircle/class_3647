@@ -13,6 +13,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		Entity<Form> uploadData = Entity.form(userForm);
 		
 		Response response = target("/users").request().post(uploadData);
-		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
 		assertNotNull(users.getUser("john.doe"));
 		
 	}
@@ -55,7 +56,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		Entity<Form> uploadData = Entity.form(userForm);
 		
 		Response response = target("/users").request().post(uploadData);
-		assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 		
 	}
 	
@@ -66,7 +67,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		users.createUser(john.getUsername(), john.getRealname());
 		
 		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.TEXT_PLAIN).get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
 
 		Object entity = response.getEntity();
@@ -105,7 +106,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		}
 		
 		Response response = target("/users").request().header("Accept", "text/plain").get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.TEXT_PLAIN_TYPE, response.getMediaType());
 
 		Object entity = response.getEntity();
@@ -136,13 +137,13 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 	}
 
 	@Test
-	public void getSingleUsersAsXml() {
+	public void getSingleUserAsXml() {
 		
 		User john = new User("john.doe", "John Doe");
 		users.createUser(john.getUsername(), john.getRealname());
 		
-		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML).get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
 		
 		// TODO: Implement testing the actual XML response
@@ -163,10 +164,9 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		}
 		
 		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
 		
-		// TODO: Implement testing the actual XML response
 		
 	}
 
@@ -177,7 +177,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		users.createUser(john.getUsername(), john.getRealname());
 		
 		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_JSON_TYPE).get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
 		
 		// TODO: Implement testing the actual JSON response
@@ -197,12 +197,11 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		}
 		
 		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_JSON_TYPE).get();
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
 		
 		// TODO: Implement testing the actual JSON response
 		
 	}
-
 
 }
