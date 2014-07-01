@@ -49,9 +49,11 @@ public abstract class JerseyResourceTest<R> extends JerseyTest {
 		final Class<R> resourceClass = (Class<R>) ((ParameterizedType) getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
 
-		// ResourceConfig is a Jersey specific javax.ws.rs.core.Application
-		// subclass
-		return new ResourceConfig().register(resourceClass);
+		// ResourceConfig is a Jersey specific javax.ws.rs.core.Application subclass
+		ResourceConfig resourceConfig = new ResourceConfig();
+		resourceConfig.packages("chirp.service.providers");
+		resourceConfig.register(resourceClass);
+		return resourceConfig;
 
 	}
 

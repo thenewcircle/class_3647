@@ -10,6 +10,11 @@ Lab Exercise 6
 3. Let's update our server to include additional packages, e.g. chirp.service.providers package
    Use semi-colon to list additional packages.
    
+   Make sure you do the same updates in the JerseyResourceTest class with ResourceConfig, e.g.
+   
+     resourceConfig.package("PACKAGE_NAME");
+     resourceConfig.register(resourceClass);
+   
 4. Create new package, e.g. chirp.service.providers
 
 5. Let's add new exception mapper class, e.g. DuplicateEntityExceptionMapper that
