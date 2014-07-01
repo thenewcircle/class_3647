@@ -5,10 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -27,8 +24,6 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		Response response = target("/users").request().post(uploadData);
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 		assertNotNull(users.getUser("john.doe"));
-		String realName = target("/users").path("john.doe").request().accept(MediaType.TEXT_PLAIN).get(String.class);
-		assertEquals("John Doe", realName);
 	}
 
 }
