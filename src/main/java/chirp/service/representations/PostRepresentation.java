@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import chirp.model.Post;
 
-@XmlRootElement
+@XmlRootElement(name="post")
 public class PostRepresentation {
 	
 	private String timestamp;

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import chirp.model.User;
 
-@XmlRootElement
+@XmlRootElement(name="user")
 public class UserRepresentation {
 	
 	private String username;
