@@ -1,0 +1,27 @@
+Lab Exercise 14
+---------------
+
+1. Our test application should have worked without need for links and HATEOAS.
+   However, often times - our application relies on links to define state machine rules.
+
+   Let's implement HATEOAS in our Chirp application.
+
+   First we will start with structural links. Next lab we will add transitional links as well.
+
+2. Let's add new URI field to representation classes, e.g. private URI self
+
+   Use UriBuilder and Response classes to build self links.
+
+   Do this for all representation classes, e.g.
+      UserRepresentation
+      PostRepresentation
+      UserCollectionRepresentation
+      PostCollectionRepresentation
+
+
+      e.g. 
+      
+		URI selflink = UriBuilder
+				.fromResource(this.getClass())
+				.path(username)
+				.build();
