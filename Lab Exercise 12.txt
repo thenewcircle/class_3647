@@ -1,0 +1,42 @@
+Lab Exercise 12
+---------------
+
+1. So far, we used the entity model to pass around in REST.
+   We had to update our entity classes, to work with
+   JSON/JAXB serialization/deserialization
+
+   Better approach is to use Resource representation classes.
+
+2. Add new package for representations, e.g. chirp.service.representations
+
+3. Add new representation classes, e.g.
+
+     UserRepresentation
+       - string fields for username, realname
+       - constructor passing a user
+       - constructor passing strings (annotate with @JsonCreator)
+       - getters for fields
+
+     PostRepresentation
+       - string fields for timestamp, content
+       - constructor passing a post
+       - constructor passing strings (annotate with @JsonCreator)
+       - getters for fields
+
+4. Update UserResource to consume JSON object when creating a user, and pass in the UserRepresentation.
+       - add @Consumes(MediaType.APPLICATION_JSON)
+       - return UserRepresentation instead of User
+     
+5. Update PostResource to consume JSON object when creating a post, and pass in the PostRepresentation.
+       - add @Consumes(MediaType.APPLICATION_JSON)
+       - return PostRepresentation instead of Post
+
+6. Update UserRepresentation and PostRepresentation to include JAXB bindings, so we can serialize/deserialize to and from XML.
+
+7. Add summary representations:
+       - UserRepresentation - return only usernames, not realnames (make it null)
+       - PostRepresentation - return only timestamps, not content (make it null)
+
+8. Make sure your tests work.
+
+
