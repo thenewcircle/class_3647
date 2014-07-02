@@ -51,7 +51,11 @@ public class UserResource {
 		logger.info("Searching for a user with username={}", username);
 		User user = database.getUser(username);
 		logger.info("Found a user: " + user);
-		return new UserRepresentation(user,false);
+		URI selflink = UriBuilder
+				.fromResource(this.getClass())
+				.path(username)
+				.build();
+		return new UserRepresentation(user,false,selflink);
 	}
 	
 	/*
@@ -62,10 +66,17 @@ public class UserResource {
 		logger.info("Searching for users.");
 		Collection<UserRepresentation> users = new LinkedList<>();
 		for (User user : database.getUsers()) {
-			users.add(new UserRepresentation(user,false));
+			URI selflink = UriBuilder
+					.fromResource(this.getClass())
+					.path(user.getUsername())
+					.build();
+			users.add(new UserRepresentation(user,false,selflink));
 		}
 		logger.info("Found users: " + users.size());
-		return new UserRepresentationCollection(users);
+		URI selflink = UriBuilder
+				.fromResource(this.getClass())
+				.build();
+		return new UserRepresentationCollection(users,selflink);
 	}
 	
 	/*

@@ -1,5 +1,7 @@
 package chirp.service.representations;
 
+import java.net.URI;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -10,12 +12,14 @@ public class PostRepresentation {
 	
 	private String timestamp;
 	private String content;
-	private String user;
+	private String user;	
+	private URI self;
 	
 	public PostRepresentation() {
 	}
 	
-	public PostRepresentation(Post post, boolean summary) {
+	public PostRepresentation(Post post, boolean summary, URI self) {
+		this.self = self;
 		timestamp = post.getTimestamp().toString();
 		content = summary ? null : post.getContent();
 		user = summary ? null : post.getUser().getUsername();
@@ -47,6 +51,13 @@ public class PostRepresentation {
 	public void setUser(String user) {
 		this.user = user;
 	}
-	
-	
+
+	public URI getSelf() {
+		return self;
+	}
+
+	public void setSelf(URI self) {
+		this.self = self;
+	}
+		
 }
