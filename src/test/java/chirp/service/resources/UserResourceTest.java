@@ -19,6 +19,8 @@ import org.junit.Test;
 import chirp.model.NoSuchEntityException;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.UserRepresentation;
+import chirp.service.representations.UserRepresentationCollection;
 
 public class UserResourceTest extends JerseyResourceTest<UserResource> {
 
@@ -70,7 +72,14 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
 		
-		// TODO: Implement testing the actual XML response
+		try {
+			UserRepresentation user = response.readEntity(UserRepresentation.class);
+			assertNotNull(user);
+			assertEquals(john.getUsername(), user.getUsername());
+			assertEquals(john.getRealname(), user.getRealname());
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 		
 	}
 
@@ -87,10 +96,19 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 			users.createUser(u.getUsername(), u.getRealname());
 		}
 		
-		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_XML_TYPE).get();
+		Response response = target("/users").request().header("Accept", MediaType.APPLICATION_XML).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_XML_TYPE, response.getMediaType());
 		
+		try {
+			UserRepresentationCollection userlist = response.readEntity(UserRepresentationCollection.class);
+			assertNotNull(userlist);
+			for (UserRepresentation user : userlist.getUsers()) {
+				assertNotNull(users.getUser(user.getUsername()));
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 		
 	}
 
@@ -100,11 +118,18 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		User john = new User("john.doe", "John Doe");
 		users.createUser(john.getUsername(), john.getRealname());
 		
-		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_JSON_TYPE).get();
+		Response response = target("/users").path("john.doe").request().header("Accept", MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
 		
-		// TODO: Implement testing the actual JSON response
+		try {
+			UserRepresentation user = response.readEntity(UserRepresentation.class);
+			assertNotNull(user);
+			assertEquals(john.getUsername(), user.getUsername());
+			assertEquals(john.getRealname(), user.getRealname());
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 		
 	}
 
@@ -124,8 +149,15 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_JSON_TYPE, response.getMediaType());
 		
-		// TODO: Implement testing the actual JSON response
-		
+		try {
+			UserRepresentationCollection userlist = response.readEntity(UserRepresentationCollection.class);
+			assertNotNull(userlist);
+			for (UserRepresentation user : userlist.getUsers()) {
+				assertNotNull(users.getUser(user.getUsername()));
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 	}
 	
 	@Test

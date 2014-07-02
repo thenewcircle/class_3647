@@ -1,6 +1,7 @@
 package chirp.service.resources;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import javax.ws.rs.client.Entity;
@@ -9,18 +10,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import chirp.model.Post;
+import chirp.model.Timestamp;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.PostRepresentation;
+import chirp.service.representations.PostRepresentationCollection;
 
 public class PostResourceTest extends JerseyResourceTest<PostResource> {
 
 	private UserRepository users = UserRepository.getInstance();
 	
-	@After
+	@Before
 	public void cleanup() {
 		users.clear();
 	}
@@ -61,62 +65,120 @@ public class PostResourceTest extends JerseyResourceTest<PostResource> {
 	}
 	
 	@Test
-	public void getAllPosts() {
+	public void getAllPostsAsJson() {
 		
-		User john = new User("john.doe","John Doe");
-		User jane = new User("jane.doe","Jane Doe");
-		
-		users.createUser(john.getUsername(),john.getRealname());
-		users.createUser(jane.getUsername(),jane.getRealname());
-		
-		for (int i=0; i<4; i++) {
-			users.getUser(john.getUsername()).createPost("John's post #" + i + ".");
-			users.getUser(jane.getUsername()).createPost("Jane's post #" + i + ".");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				fail("InterruptedException caught: " + e);
-			}
-		}
+		this.setupUsersAndPosts();
 
 		Response response = target("/posts").request().header("Accept", MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		
-		// TODO: Add checks for representation returned back
+		try {
+			PostRepresentationCollection postlist = response.readEntity(PostRepresentationCollection.class);
+			assertNotNull(postlist);
+			for (PostRepresentation post : postlist.getPosts()) {
+				String username = post.getUser();
+				assertNotNull(username);
+				User user = users.getUser(username);
+				assertNotNull(user);
+				Post p = user.getPost(new Timestamp(post.getTimestamp()));
+				assertNotNull(p);
+				assertEquals(user.getRealname() + " " + post.getTimestamp(), p.getContent());
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 		
 	}
 	
 	@Test
-	public void getAllPostsByUser() {
-
-		User john = new User("john.doe","John Doe");
-		User jane = new User("jane.doe","Jane Doe");
+	public void getAllPostsAsXml() {
 		
-		users.createUser(john.getUsername(),john.getRealname());
-		users.createUser(jane.getUsername(),jane.getRealname());
+		this.setupUsersAndPosts();
 
-		for (int i=0; i<4; i++) {
-			users.getUser(john.getUsername()).createPost("John's post #" + i + ".");
-			users.getUser(jane.getUsername()).createPost("Jane's post #" + i + ".");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				fail("InterruptedException caught: " + e);
-			}
-		}
-
-
-
-		Response response = target("/posts").path(john.getUsername()).request().header("Accept", MediaType.APPLICATION_JSON).get();
+		Response response = target("/posts").request().header("Accept", MediaType.APPLICATION_XML).get();
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		
-		// TODO: Add checks for representation returned back
+		try {
+			PostRepresentationCollection postlist = response.readEntity(PostRepresentationCollection.class);
+			assertNotNull(postlist);
+			for (PostRepresentation post : postlist.getPosts()) {
+				String username = post.getUser();
+				assertNotNull(username);
+				User user = users.getUser(username);
+				assertNotNull(user);
+				Post p = user.getPost(new Timestamp(post.getTimestamp()));
+				assertNotNull(p);
+				assertEquals(user.getRealname() + " " + post.getTimestamp(), p.getContent());
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
+		
+	}
+	
+	@Test
+	public void getAllPostsByUserAsJson() {
+
+		this.setupUsersAndPosts();
+
+		Response response = target("/posts").path("john.doe").request().header("Accept", MediaType.APPLICATION_JSON).get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		try {
+			PostRepresentationCollection postlist = response.readEntity(PostRepresentationCollection.class);
+			assertNotNull(postlist);
+			for (PostRepresentation post : postlist.getPosts()) {
+				assertEquals("john.doe", post.getUser());
+				User user = users.getUser("john.doe");
+				assertNotNull(user);
+				Post p = user.getPost(new Timestamp(post.getTimestamp()));
+				assertNotNull(p);
+				assertEquals("John Doe " + post.getTimestamp(), p.getContent());
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
+		
+	}
+	
+	@Test
+	public void getAllPostsByUserAsXml() {
+
+		this.setupUsersAndPosts();
+
+		Response response = target("/posts").path("john.doe").request().header("Accept", MediaType.APPLICATION_XML).get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		try {
+			PostRepresentationCollection postlist = response.readEntity(PostRepresentationCollection.class);
+			assertNotNull(postlist);
+			for (PostRepresentation post : postlist.getPosts()) {
+				assertEquals("john.doe", post.getUser());
+				User user = users.getUser("john.doe");
+				assertNotNull(user);
+				Post p = user.getPost(new Timestamp(post.getTimestamp()));
+				assertNotNull(p);
+				assertEquals("John Doe " + post.getTimestamp(), p.getContent());
+			}
+		} catch (Exception e) {
+			fail("Caught exception: " + e);
+		}
 		
 	}
 	
 	@Test
 	public void getAllPostsByNonExistentUser() {
 
+		this.setupUsersAndPosts();
+
+		Response response = target("/posts").path("non-existent").request().header("Accept", MediaType.APPLICATION_JSON).get();
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+				
+	}
+	
+	
+	private void setupUsersAndPosts() {
+		
 		User john = new User("john.doe","John Doe");
 		User jane = new User("jane.doe","Jane Doe");
 		
@@ -124,20 +186,14 @@ public class PostResourceTest extends JerseyResourceTest<PostResource> {
 		users.createUser(jane.getUsername(),jane.getRealname());
 		
 		for (int i=0; i<4; i++) {
-			users.getUser(john.getUsername()).createPost("John's post #" + i + ".");
-			users.getUser(jane.getUsername()).createPost("Jane's post #" + i + ".");
+			users.getUser(john.getUsername()).createPost(john.getRealname() + " " + (new Timestamp()));
+			users.getUser(jane.getUsername()).createPost(jane.getRealname() + " " + (new Timestamp()));
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				fail("InterruptedException caught: " + e);
 			}
 		}
-
-		Response response = target("/posts").path("non-existent").request().header("Accept", MediaType.APPLICATION_JSON).get();
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-		
-		// TODO: Add checks for representation returned back
-		
 	}
 	
 //	@Test

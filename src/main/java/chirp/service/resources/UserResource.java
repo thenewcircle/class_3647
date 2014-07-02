@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import chirp.model.User;
 import chirp.model.UserRepository;
 import chirp.service.representations.UserRepresentation;
+import chirp.service.representations.UserRepresentationCollection;
 
 @Path("/users")
 public class UserResource {
@@ -57,14 +58,14 @@ public class UserResource {
 	 * GET /users
 	 */
 	@GET
-	public Collection<UserRepresentation> getUsers() {
+	public UserRepresentationCollection getUsers() {
 		logger.info("Searching for users.");
 		Collection<UserRepresentation> users = new LinkedList<>();
 		for (User user : database.getUsers()) {
 			users.add(new UserRepresentation(user,false));
 		}
 		logger.info("Found users: " + users.size());
-		return users;
+		return new UserRepresentationCollection(users);
 	}
 	
 	/*

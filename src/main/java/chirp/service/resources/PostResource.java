@@ -20,6 +20,7 @@ import chirp.model.Timestamp;
 import chirp.model.User;
 import chirp.model.UserRepository;
 import chirp.service.representations.PostRepresentation;
+import chirp.service.representations.PostRepresentationCollection;
 
 @Path("/posts")
 public class PostResource {
@@ -65,14 +66,14 @@ public class PostResource {
 	 * GET /posts
 	 */
 	@GET
-	public Collection<PostRepresentation> getPosts() {
+	public PostRepresentationCollection getPosts() {
 		logger.info("Getting all posts.");
 		Collection<PostRepresentation> result = new LinkedList<>();
 		for (Post post : database.getPosts()) {
 			result.add(new PostRepresentation(post, false));
 		}
 		logger.info("Found posts: " + result.size());
-		return result;
+		return new PostRepresentationCollection(result);
 	}
 
 	/* 
@@ -80,14 +81,14 @@ public class PostResource {
 	 */
 	@GET
 	@Path("{username}")
-	public Collection<PostRepresentation> getPostsByUser(@PathParam("username") String username) {
+	public PostRepresentationCollection getPostsByUser(@PathParam("username") String username) {
 		logger.info("Getting all posts.");
 		Collection<PostRepresentation> result = new LinkedList<>();
 		for (Post post : database.getUser(username).getPosts()) {
 			result.add(new PostRepresentation(post, false));
 		}
 		logger.info("Found posts: " + result.size());
-		return result;
+		return new PostRepresentationCollection(result);
 	}
 	
 }
