@@ -2,6 +2,7 @@ package chirp.service.resources;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.UserRepresentation;
 
 @Path("/users")
 public class UserResource {
@@ -44,20 +46,23 @@ public class UserResource {
 	 */
 	@GET
 	@Path("{username}")
-	public User getUser(@PathParam("username") String username) {
+	public UserRepresentation getUser(@PathParam("username") String username) {
 		logger.info("Searching for a user with username={}", username);
 		User user = database.getUser(username);
 		logger.info("Found a user: " + user);
-		return user;
+		return new UserRepresentation(user,false);
 	}
 	
 	/*
 	 * GET /users
 	 */
 	@GET
-	public Collection<User> getUsers() {
+	public Collection<UserRepresentation> getUsers() {
 		logger.info("Searching for users.");
-		Collection<User> users = database.getUsers();
+		Collection<UserRepresentation> users = new LinkedList<>();
+		for (User user : database.getUsers()) {
+			users.add(new UserRepresentation(user,false));
+		}
 		logger.info("Found users: " + users.size());
 		return users;
 	}

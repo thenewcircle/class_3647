@@ -2,6 +2,7 @@ package chirp.service.resources;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -18,6 +19,7 @@ import chirp.model.Post;
 import chirp.model.Timestamp;
 import chirp.model.User;
 import chirp.model.UserRepository;
+import chirp.service.representations.PostRepresentation;
 
 @Path("/posts")
 public class PostResource {
@@ -49,23 +51,26 @@ public class PostResource {
 	 */
 	@GET
 	@Path("{username}/{timestamp}")
-	public Post getPost(
+	public PostRepresentation getPost(
 				@PathParam("username") String username,
 				@PathParam("timestamp") String timestamp
 			) {
 		logger.info("Searching for a post posted by user with username={} and timestamp={}", username, timestamp);
 		Post post = database.getUser(username).getPost(new Timestamp(timestamp));
 		logger.info("Found a post: " + post);
-		return post;
+		return new PostRepresentation(post, false);
 	}
 	
 	/*
 	 * GET /posts
 	 */
 	@GET
-	public Collection<Post> getPosts() {
+	public Collection<PostRepresentation> getPosts() {
 		logger.info("Getting all posts.");
-		Collection<Post> result = database.getPosts();
+		Collection<PostRepresentation> result = new LinkedList<>();
+		for (Post post : database.getPosts()) {
+			result.add(new PostRepresentation(post, false));
+		}
 		logger.info("Found posts: " + result.size());
 		return result;
 	}
@@ -75,9 +80,12 @@ public class PostResource {
 	 */
 	@GET
 	@Path("{username}")
-	public Collection<Post> getPostsByUser(@PathParam("username") String username) {
+	public Collection<PostRepresentation> getPostsByUser(@PathParam("username") String username) {
 		logger.info("Getting all posts.");
-		Collection<Post> result = database.getUser(username).getPosts();
+		Collection<PostRepresentation> result = new LinkedList<>();
+		for (Post post : database.getUser(username).getPosts()) {
+			result.add(new PostRepresentation(post, false));
+		}
 		logger.info("Found posts: " + result.size());
 		return result;
 	}
