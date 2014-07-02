@@ -1,0 +1,25 @@
+Lab Exercise 11
+---------------
+
+1. So far we have completed the following use cases:
+
+     + Create a user   (done)
+     + Get a user      (done)
+     + Get users       (done)
+     + Create a post for selected user (done)
+
+   Let's create the following use cases:
+ 
+     - Get all posts (sorted by timestamp)
+     - Get all posts by user (sorted by timestamp)
+
+   Optionally, we could include the following usecases
+     - Delete user
+     - Update user 
+  
+2. Make sure you have the mappers for all runtime exceptions we throw, e.g.
+
+     - DuplicateEntityException
+     - NoSuchEntityException
+
+
