@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +104,29 @@ public class UserRepository implements Serializable {
 		if (users.remove(username) == null)
 			throw new NoSuchEntityException();
 	}
+	
+	public void updateUser(String username, String realname) {
+		User user = users.get(username);
+		if (user == null)
+			throw new NoSuchEntityException();
+		user.setRealname(realname);
+	}
 
+	/*
+	 * We had to add the search for all posts,
+	 * we know it is a terrible design, and quick-hack
+	 * to get all the posts on the UserRepository (our data layer).
+	 * We should really get this info from our data layer, 
+	 * from DAO, JPA and eventually from the database.
+	 */
+	public Collection<Post> getPosts() {
+		Collection<Post> result = new LinkedList<>();
+		for (User u : users.values()) {
+			result.addAll(u.getPosts());
+		}
+		return result;
+	}
+	
 	public int createBulkDeletion() {
 		bulkDeletions.add(new HashSet<User>());
 		return bulkDeletions.size() - 1;

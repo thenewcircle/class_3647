@@ -3,13 +3,13 @@ package chirp.service.resources;
 import java.net.URI;
 import java.util.Collection;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
@@ -25,6 +25,9 @@ public class UserResource {
 	private final UserRepository database = UserRepository.getInstance();
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	/*
+	 * POST /users
+	 */
 	@POST
 	public Response createUser(
 			@FormParam("realname") String realname,
@@ -36,61 +39,54 @@ public class UserResource {
 		return Response.created(location).build();
 	}
 	
+	/*
+	 * GET /users/{username}
+	 */
 	@GET
 	@Path("{username}")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getUserAsText(@PathParam("username") String username) {
-		logger.info("Searching for a TEXT_PLAIN representation of user with username={}", username);
-		User user = database.getUser(username);
-		logger.info("Found a user: " + user);
-		return user.toString();
-	}
-	
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getUsersAsText(@PathParam("username") String username) {
-		logger.info("Searching for a TEXT_PLAIN representation of all users.");
-		Collection<User> users = database.getUsers();
-		logger.info("Found users: " + users.size());
-		return users.toString();
-	}
-	
-	@GET
-	@Path("{username}")
-	@Produces(MediaType.APPLICATION_XML)
-	public User getUserAsXml(@PathParam("username") String username) {
-		logger.info("Searching for a APPLICATION_XML representation of user with username={}", username);
+	public User getUser(@PathParam("username") String username) {
+		logger.info("Searching for a user with username={}", username);
 		User user = database.getUser(username);
 		logger.info("Found a user: " + user);
 		return user;
 	}
 	
+	/*
+	 * GET /users
+	 */
 	@GET
-	@Produces(MediaType.APPLICATION_XML)
-	public Collection<User> getUsersAsXml() {
-		logger.info("Searching for a APPLICATION_XML representation of users");
+	public Collection<User> getUsers() {
+		logger.info("Searching for users.");
 		Collection<User> users = database.getUsers();
 		logger.info("Found users: " + users.size());
 		return users;
 	}
 	
-	@GET
+	/*
+	 * DELETE /users/{username}
+	 */
+	@DELETE
 	@Path("{username}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User getUserAsJson(@PathParam("username") String username) {
-		logger.info("Searching for a APPLICATION_JSON representation of user with username={}", username);
-		User user = database.getUser(username);
-		logger.info("Found a user: " + user);
-		return user;
+	public Response deleteUser(@PathParam("username") String username) {
+		logger.info("Deleting user: username=" + username);
+		database.deleteUser(username);
+		logger.info("Deleted user: username=" + username);
+		return Response.noContent().build();
 	}
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getUsersAsJson() {
-		logger.info("Searching for a APPLICATION_JSON representation of users");
-		Collection<User> users = database.getUsers();
-		logger.info("Found users: " + users.size());
-		return users;
+	/*
+	 * UPDATE /users/{username}
+	 */
+	@PUT
+	@Path("{username}")
+	public Response updateUser(
+			@PathParam("username") String username,
+			@FormParam("realname") String realname
+		) {
+		logger.info("Updating user username={} and realname={}", username, realname);
+		database.updateUser(username, realname);
+		logger.info("User updated: username={} and realname={} ", username, realname);
+		return Response.noContent().build();
 	}
 	
 }

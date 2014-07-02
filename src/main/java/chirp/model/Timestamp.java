@@ -13,7 +13,7 @@ public class Timestamp implements Comparable<Timestamp>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String timestamp;
+	private String timestamp;
 
 	public Timestamp(String timestamp) {
 		this.timestamp = timestamp;
@@ -23,6 +23,18 @@ public class Timestamp implements Comparable<Timestamp>, Serializable {
 		this(DateTimeFormat.forPattern("yyyyMMddHHmmss").print(new DateTime()));
 	}
 
+	/*
+	 * We need to expose setters/getters for serialization to work without the ObjectMappers.
+	 * For simplicity we will just add that;
+	 */
+	public String getTimestamp() {
+		return this.timestamp;
+	}
+	
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	@Override
 	public int compareTo(Timestamp other) {
 		return timestamp.compareTo(other.timestamp);

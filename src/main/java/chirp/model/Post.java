@@ -2,6 +2,8 @@ package chirp.model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Entity representing a "chirp" posted by a user.
  * To properly create a Post, call User.createPost().
@@ -28,6 +30,10 @@ public class Post implements Serializable {
 		return content;
 	}
 
+	/*
+	 * We need to ignore getUser() call when serializing to JSON, due to infinite recursion.
+	 */
+	@JsonIgnore
 	public User getUser() {
 		return user;
 	}

@@ -18,13 +18,11 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String username;
-	private final String realname;
+	private String username;
+	private String realname;
 	private final Map<Timestamp, Post> posts = new TreeMap<Timestamp, Post>();
 
 	public User() {	
-		this.username = "unknown";
-		this.realname = "unknown";
 	}
 	
 	public User(String username, String realname) {
@@ -42,6 +40,17 @@ public class User implements Serializable {
 		return realname;
 	}
 
+	/*
+	 * We need to add setters so we can update the user data.
+	 */
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	
 	public Post createPost(String content) {
 		Timestamp timestamp = new Timestamp();
 		if (posts.containsKey(timestamp))
