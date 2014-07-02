@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import chirp.model.NoSuchEntityException;
@@ -26,7 +26,7 @@ public class UserResourceTest extends JerseyResourceTest<UserResource> {
 
 	private UserRepository users = UserRepository.getInstance();
 	
-	@After
+	@Before
 	public void cleanup() {
 		users.clear();
 	}
