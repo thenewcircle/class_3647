@@ -1,0 +1,29 @@
+Lab Exercise 13
+---------------
+
+1. We got the representation classes for User and Post entities.
+   Now let's add representation classes for collections of users and posts.
+
+2. Add new classes to chirp.services.representations
+
+     UserCollectionRepresentation
+       - field users - Collection<UserRepresentation> 
+       - default constructor
+       - constructor passing in Collection<UserRepresentation>
+       - setters and getters for users
+
+     PostCollectionRepresentation
+       - field posts - Collection<PostRepresentation> 
+       - default constructor
+       - constructor passing in Collection<PostRepresentation>
+       - setters and getters for posts
+   
+3. Add to existing getter tests (in testcases UserResourceTest and PostResourceTest)
+   Check for content returning back.
+
+   Use response.readEntity(UserRepresentation.class) to read UserRepresentation
+   Use response.readEntity(UserCollectionRepresentation.class) to read UserCollectionRepresentation
+   Use response.readEntity(PostRepresentation.class) to read PostRepresentation
+   Use response.readEntity(PostCollectionRepresentation.class) to read PostCollectionRepresentation
+   
+
