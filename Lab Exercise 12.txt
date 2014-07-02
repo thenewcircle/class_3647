@@ -13,23 +13,21 @@ Lab Exercise 12
 
      UserRepresentation
        - string fields for username, realname
+       - default constructor
        - constructor passing a user
-       - constructor passing strings (annotate with @JsonCreator)
        - getters for fields
+       - setters for fields
 
      PostRepresentation
        - string fields for timestamp, content
+       - default constructor
        - constructor passing a post
-       - constructor passing strings (annotate with @JsonCreator)
        - getters for fields
+       - setters for fields
 
-4. Update UserResource to consume JSON object when creating a user, and pass in the UserRepresentation.
-       - add @Consumes(MediaType.APPLICATION_JSON)
-       - return UserRepresentation instead of User
+4. Update UserResource to return UserRepresentation objects and their collections
      
-5. Update PostResource to consume JSON object when creating a post, and pass in the PostRepresentation.
-       - add @Consumes(MediaType.APPLICATION_JSON)
-       - return PostRepresentation instead of Post
+5. Update PostResource to return PostRepresentation objects and their collections
 
 6. Update UserRepresentation and PostRepresentation to include JAXB bindings, so we can serialize/deserialize to and from XML.
 
